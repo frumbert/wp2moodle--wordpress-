@@ -2,7 +2,7 @@
 (function() {
     tinymce.create('tinymce.plugins.wp2m', {
         init : function(ed, url) {
-            ed.addButton('l2m', {
+            ed.addButton('wp2m', {
                 title : 'Wordpress 2 Moodle',
                 image : url+'/icon.png',
                 onclick : function() {
