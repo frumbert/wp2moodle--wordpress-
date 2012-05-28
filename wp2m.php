@@ -91,7 +91,7 @@ function wp2m_create_menu() {
 	add_menu_page( 
 	__('wp2Moodle', EMU2_I18N_DOMAIN),
 	__('wp2Moodle', EMU2_I18N_DOMAIN),
-	0,
+	'administrator',
 	WP2M_PLUGIN_DIRECTORY.'/wp2m_settings_page.php',
 	'',
 	plugins_url('icon.png', __FILE__));
