@@ -33,7 +33,7 @@ define( 'WP2M_PLUGIN_DIRECTORY', 'wp2moodle');
 define( 'WP2M_CURRENT_VERSION', '0.1' );
 define( 'WP2M_CURRENT_BUILD', '1' );
 define( 'EMU2_I18N_DOMAIN', 'wp2m' );
-define( 'WP2M_MOODLE_PLUGIN_URL', '/local/wp2moodle/login.php?data=');
+define( 'WP2M_MOODLE_PLUGIN_URL', '/auth/wp2moodle/login.php?data=');
 
 function wp2m_set_lang_file() {
 	$currentLocale = get_locale();
