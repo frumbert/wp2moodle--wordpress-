@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: wp2moodle
-Plugin URI: #github link
+Plugin URI: https://github.com/frumbert/wp2moodle--wordpress-
 Description: A plugin that sends the authenticated users details to a moodle site for authentication, enrols them in the specified cohort
 Requires: Moodle 2.2 site with the wp2moodle (Moodle) auth plugin enabled
 Version: 0.1
@@ -28,9 +28,9 @@ License: GPL2
 ?><?php
 
 // some definition we will use
-define( 'WP2M_PUGIN_NAME', 'Link 2 Moodle');
+define( 'WP2M_PUGIN_NAME', 'Wordpress 2 Moodle (SSO)');
 define( 'WP2M_PLUGIN_DIRECTORY', 'wp2moodle');
-define( 'WP2M_CURRENT_VERSION', '0.1' );
+define( 'WP2M_CURRENT_VERSION', '0.2' );
 define( 'WP2M_CURRENT_BUILD', '1' );
 define( 'EMU2_I18N_DOMAIN', 'wp2m' );
 define( 'WP2M_MOODLE_PLUGIN_URL', '/auth/wp2moodle/login.php?data=');
