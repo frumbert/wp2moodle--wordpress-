@@ -151,7 +151,7 @@ function wp2moodle_handler( $atts, $content = null ) {
 		// encryption = 3des using shared_secret
 		$details = http_build_query(array(
 			"a", rand(1, 1500),									// set first to randomise the encryption when this string is encoded
-			"stamp" => date_timestamp_get(date_create("now")),	// unix timestamp so we can check that the link isn't expired
+			"stamp" => time(),	// unix timestamp so we can check that the link isn't expired
 			"firstname" => $current_user->user_firstname,		// first name
 			"lastname" => $current_user->user_lastname,			// last name
 			"email" => $current_user->user_email,				// email
