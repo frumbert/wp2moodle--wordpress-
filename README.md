@@ -3,10 +3,17 @@ wp2moodle--wordpress-
 
 Wordpress to Moodle pass through authentication plugin (wordpress end). Takes the user that is logged onto wordpress and passes their details over to Moodle, enrols them and authenticates.
 
-Note, you must to rename the zip to be just 'wp2moodle.zip' before you upload the plugin to wordpress.
+Demo
+----
+Go to my wordpress demo site and register yourself, then try the links.
+
+http://wordpress.frumbert.org/
+
 
 Activating and configuring the plugin
 -------------------------------
+Note, you must to rename the zip to be just 'wp2moodle.zip' before you upload the plugin to wordpress. If the zip extracts to a sub-folder, it won't work!
+
 1. Upload this to your wordpress (should end up being called /wp-content/plugins/wp2moodle/)
 2. Activate the plugin
 3. Click wp2moodle on the wordpress menu
