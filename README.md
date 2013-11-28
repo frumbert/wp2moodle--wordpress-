@@ -29,14 +29,17 @@ How to use the plugin
 
 Note: If the user is not yet authenticated, no hyperlink is rendered. The link does not function for Wordpress admins.
 
-Shortcode example
------------------
+Shortcode examples
+------------------
 
 [wp2moodle class='my-class' cohort='course1' target='_blank']<img src='path.gif'>Open my course[/wpmoodle]
 
+[wp2moodle group='group2']A hyperlink[/wp2moodle]
+
 class: the css classname to apply to the link (default: wp2moodle)
 target: the hyperlink target name to apply to the link (defaut: _self)
-cohort: the name of the moodle cohort in which to enrol the user
+cohort: (optional) the id [mdl_cohort.idnumber] of the moodle cohort in which to enrol the user
+group: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user
 
 Licence:
 --------
