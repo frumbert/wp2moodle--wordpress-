@@ -150,23 +150,30 @@ function wp2moodle_handler( $atts, $content = null ) {
 		$url = do_shortcode($content);
 	} else {
 		// url = moodle_url + "?data=" + <encrypted-value>
-		// encryption = 3des using shared_secret
-		$details = http_build_query(array(
-			"a", rand(1, 1500),									// set first to randomise the encryption when this string is encoded
-			"stamp" => time(),									// unix timestamp so we can check that the link isn't expired
-			"firstname" => $current_user->user_firstname,		// first name
-			"lastname" => $current_user->user_lastname,			// last name
-			"email" => $current_user->user_email,				// email
-			"username" => $current_user->user_login,			// username
-			"passwordhash" => $current_user->user_pass,			// hash of password (we don't know/care about the raw password)
-			"idnumber" => $current_user->ID,					// int id of user in this db (for user matching on services, etc)
-			"cohort" => $cohort,								// string containing cohort to enrol this user into
-			"group" => $group,									// string containing group to enrol this user into
-			"z" => rand(1, 1500),								// extra randomiser for when this string is encrypted (for variance)
-		));
-		$url = '<a target="'.esc_attr($target).'" class="'.esc_attr($class).'" href="'.get_option('wp2m_moodle_url').WP2M_MOODLE_PLUGIN_URL.encrypt_string($details, get_option('wp2m_shared_secret')).'">'.do_shortcode($content).'</a>';
+		$url = '<a target="'.esc_attr($target).'" class="'.esc_attr($class).'" href="'.wp2moodle_generate_hyperlink($cohort,$group).'">'.do_shortcode($content).'</a>';
 	}		
 	return $url;
+}
+
+/*
+ * Function to build the encrypted hyperlink
+ */
+function wp2moodle_generate_hyperlink($cohort,$group) {
+	$details = http_build_query(array(
+		"a", rand(1, 1500),									// set first to randomise the encryption when this string is encoded
+		"stamp" => time(),									// unix timestamp so we can check that the link isn't expired
+		"firstname" => $current_user->user_firstname,		// first name
+		"lastname" => $current_user->user_lastname,			// last name
+		"email" => $current_user->user_email,				// email
+		"username" => $current_user->user_login,			// username
+		"passwordhash" => $current_user->user_pass,			// hash of password (we don't know/care about the raw password)
+		"idnumber" => $current_user->ID,					// int id of user in this db (for user matching on services, etc)
+		"cohort" => $cohort,								// string containing cohort to enrol this user into
+		"group" => $group,									// string containing group to enrol this user into
+		"z" => rand(1, 1500),								// extra randomiser for when this string is encrypted (for variance)
+	));
+	// encryption = 3des using shared_secret
+	return get_option('wp2m_moodle_url').WP2M_MOODLE_PLUGIN_URL.encrypt_string($details, get_option('wp2m_shared_secret'));
 }
 
 /**
