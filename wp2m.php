@@ -130,10 +130,6 @@ function encrypt_string($value, $key) {
  */
 function wp2moodle_handler( $atts, $content = null ) {
 	
-	// needs authentication; ensure userinfo globals are populated
-	global $current_user;
-    get_currentuserinfo();
-
 	// clone attribs over any default values, builds variables out of them so we can use them below
 	// $class => css class to put on link we build
 	// $cohort => text id of the moodle cohort in which to enrol this user
@@ -159,6 +155,11 @@ function wp2moodle_handler( $atts, $content = null ) {
  * Function to build the encrypted hyperlink
  */
 function wp2moodle_generate_hyperlink($cohort,$group) {
+
+	// needs authentication; ensure userinfo globals are populated
+	global $current_user;
+    get_currentuserinfo();
+
 	$details = http_build_query(array(
 		"a", rand(1, 1500),									// set first to randomise the encryption when this string is encoded
 		"stamp" => time(),									// unix timestamp so we can check that the link isn't expired
