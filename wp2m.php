@@ -4,13 +4,13 @@ Plugin Name: wp2moodle
 Plugin URI: https://github.com/frumbert/wp2moodle--wordpress-
 Description: A plugin that sends the authenticated users details to a moodle site for authentication, enrols them in the specified cohort
 Requires: Moodle 2.2 site with the wp2moodle (Moodle) auth plugin enabled
-Version: 0.1
+Version: 1.5
 Author: Tim St.Clair
 Author URI: http://timstclair.me
 License: GPL2
 */
 
-/*  Copyright 2012
+/*  Copyright 2012-2014
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -30,7 +30,7 @@ License: GPL2
 // some definition we will use
 define( 'WP2M_PUGIN_NAME', 'Wordpress 2 Moodle (SSO)');
 define( 'WP2M_PLUGIN_DIRECTORY', 'wp2moodle');
-define( 'WP2M_CURRENT_VERSION', '0.2' );
+define( 'WP2M_CURRENT_VERSION', '1.5' );
 define( 'WP2M_CURRENT_BUILD', '1' );
 define( 'EMU2_I18N_DOMAIN', 'wp2m' );
 define( 'WP2M_MOODLE_PLUGIN_URL', '/auth/wp2moodle/login.php?data=');
@@ -66,6 +66,7 @@ add_action('init', 'wp2m_add_button');
 function wp2m_activate() {
 	add_option('wp2m_moodle_url', 'http://localhost/moodle');
 	add_option('wp2m_shared_secret', 'enter a random sequence of letters, numbers and symbols here');
+	add_option('wp2m_update_details', 'true');
 }
 
 /**
@@ -74,14 +75,16 @@ function wp2m_activate() {
 function wp2m_deactivate() {
 	delete_option('wp2m_moodle_url');
 	delete_option('wp2m_shared_secret');
+	delete_option( 'wp2m_update_details' );
 }
 
 /**
  * uninstall routine
  */
 function wp2m_uninstall() {
-	delete_option('wp2m_moodle_url');
-	delete_option('wp2m_shared_secret');
+	delete_option( 'wp2m_moodle_url' );
+	delete_option( 'wp2m_shared_secret' );
+	delete_option( 'wp2m_update_details' );
 }
 
 /**
@@ -89,12 +92,13 @@ function wp2m_uninstall() {
  */
 function wp2m_create_menu() {
 	add_menu_page( 
-	__('wp2Moodle', EMU2_I18N_DOMAIN),
-	__('wp2Moodle', EMU2_I18N_DOMAIN),
-	'administrator',
-	WP2M_PLUGIN_DIRECTORY.'/wp2m_settings_page.php',
-	'',
-	plugins_url('icon.png', __FILE__));
+		__('wp2Moodle', EMU2_I18N_DOMAIN),
+		__('wp2Moodle', EMU2_I18N_DOMAIN),
+		'administrator',
+		WP2M_PLUGIN_DIRECTORY.'/wp2m_settings_page.php',
+		'',
+		plugins_url('wp2moodle/icon.png', WP2M_PLUGIN_DIRECTORY) //__FILE__));
+	);
 }
 
 /**
@@ -104,6 +108,7 @@ function wp2m_register_settings() {
 	//register settings against a grouping (how wp-admin/options.php works)
 	register_setting( 'wp2m-settings-group', 'wp2m_moodle_url' );
 	register_setting( 'wp2m-settings-group', 'wp2m_shared_secret' );
+	register_setting( 'wp2m-settings-group', 'wp2m_update_details' );
 }
 
 /**
@@ -160,8 +165,10 @@ function wp2moodle_generate_hyperlink($cohort,$group) {
 	global $current_user;
     get_currentuserinfo();
 
-	$details = http_build_query(array(
-		"a", rand(1, 1500),									// set first to randomise the encryption when this string is encoded
+	$update = get_option('wp2m_update_details') ?: "true";
+    
+    $enc = array(
+		"offset" => rand(1234,5678),						// set first to randomise the encryption when this string is encoded
 		"stamp" => time(),									// unix timestamp so we can check that the link isn't expired
 		"firstname" => $current_user->user_firstname,		// first name
 		"lastname" => $current_user->user_lastname,			// last name
@@ -171,10 +178,15 @@ function wp2moodle_generate_hyperlink($cohort,$group) {
 		"idnumber" => $current_user->ID,					// int id of user in this db (for user matching on services, etc)
 		"cohort" => $cohort,								// string containing cohort to enrol this user into
 		"group" => $group,									// string containing group to enrol this user into
-		"z" => rand(1, 1500),								// extra randomiser for when this string is encrypted (for variance)
-	));
+		"updatable" => $update								// if user profile fields can be updated in moodle
+	);
+	
+	// encode array as querystring
+	$details = http_build_query($enc);
+	
 	// encryption = 3des using shared_secret
 	return get_option('wp2m_moodle_url').WP2M_MOODLE_PLUGIN_URL.encrypt_string($details, get_option('wp2m_shared_secret'));
+	//return get_option('wp2m_moodle_url').WP2M_MOODLE_PLUGIN_URL.'=>'.$details;
 }
 
 /**
@@ -191,7 +203,8 @@ function wp2m_register_button($buttons) {
    return $buttons;
 }
 function wp2m_add_plugin($plugin_array) {
-   $plugin_array['wp2m'] = plugins_url( 'wp2m.js', __FILE__ );
+	// __FILE__ breaks if wp2moodle is a symlink, so we have to use the defined directory
+   $plugin_array['wp2m'] = plugins_url( 'wp2moodle/wp2m.js', WP2M_PLUGIN_DIRECTORY); // __FILE__ );
    return $plugin_array;
 }
 
