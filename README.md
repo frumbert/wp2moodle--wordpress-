@@ -3,8 +3,8 @@ wp2moodle--wordpress-
 
 Wordpress to Moodle pass through authentication plugin (wordpress end). Takes the user that is logged onto wordpress and passes their details over to Moodle, enrols them and authenticates.
 
-Demo
-----
+Demo / Further documenation
+---------------------------
 Go to my wordpress demo site and register yourself, then try the links.
 
 http://wordpress.frumbert.org/
@@ -38,8 +38,8 @@ Shortcode examples
 
 class: the css classname to apply to the link (default: wp2moodle)
 target: the hyperlink target name to apply to the link (defaut: _self)
-cohort: (optional) the id [mdl_cohort.idnumber] of the moodle cohort in which to enrol the user
-group: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user
+cohort: (optional) the id [mdl_cohort.idnumber] of the moodle cohort in which to enrol the user (can be a comma-seperated list for multiple enrolments)
+group: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user (can be a comma-seperated list for multiple enrolments)
 
 Licence:
 --------
