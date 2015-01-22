@@ -3,7 +3,7 @@
 <h2><?php print WP2M_PUGIN_NAME ." ". WP2M_CURRENT_VERSION ?></h2>
 <p>This plugin allows you to place a shortcode in a post that passes encrypted logon information to Moodle, using the <a href="https://github.com/frumbert/wp2moodle-moodle">Wp2Moodle authentication plugin</a> for Moodle 2.2+. The user will be created (if required) by Moodle and optionally enrolled in the specified Cohort(s) or Group(s).</p>
 <p>Use the Moodle button on the rich editor to insert the shortcode, or enter the details manually using the examples below as a guide.</p>
-<p>Example: <em>[wp2moodle class='css-classname' group='group1' cohort='class1' target='_blank']launch the course[/wp2moodle]</em>.</p>
+<p>Example: <em>[wp2moodle class='css-classname' group='group1' cohort='class1' target='_blank' authtext='Please log on']launch the course[/wp2moodle]</em>.</p>
 <p>Group enrolment example: <em>[wp2moodle group='group1']enrol in group 1[/wp2moodle]</em>.</p>
 <p>Cohort enrolment example: <em>[wp2moodle cohort='business_cert3']enrol in Cert 3 Business[/wp2moodle]</em>.</p>
 <p>Specifying multiple groups: <em>[wp2moodle group='eng14_a,math14_b,hist13_c']Math, English & History[/wp2moodle]</em>.</p>
@@ -13,6 +13,7 @@
 	<li><em>cohort</em>: optional, idnumber of the cohort in which to enrol a user at the moodle end. You can specify multiple values using comma seperated strings.</li>
 	<li><em>group</em>: optional, idnumber of the group in which to enrol a user at the moodle end (typically you use group <i>or</i> cohort). You can specify multiple values using comma seperated strings.</li>
 	<li><em>target</em>: optional, defaults to '_self'; href target attribute of link</li>
+	<li><em>authtext</em>: optional, defaults to content between shortcode tags; string to display if not yet logged on</li>
 </ul>
 <p class="description">Note: The link that is generated is timestamped and will expire, so it cannot be bookmarked or hijacked. You must set the expiry time in the Moodle plugin. You should allow reading time of the page when considering a timeout value, since the link is generated when the page is loaded, not when the link is clicked. </p>
 <h2>Settings</h2>

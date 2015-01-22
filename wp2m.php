@@ -139,19 +139,24 @@ function wp2moodle_handler( $atts, $content = null ) {
 	// $class => css class to put on link we build
 	// $cohort => text id of the moodle cohort in which to enrol this user
 	// $group => text id of the moodle group in which to enrol this user
+	// $authtext => string containing text content to display when not logged on (defaults to content between tags when empty / missing)
 	extract(shortcode_atts(array(
 		"cohort" => '',
 		"group" => '',
 		"class" => 'wp2moodle',
-		"target" => '_self'
+		"target" => '_self',
+		"authtext" => ''
 	), $atts));
 	
 	if ($content == null || !is_user_logged_in() ) {
-		// return just the content when the user is unauthenticated or the tag wasn't set properly
-		$url = do_shortcode($content);
+		if (trim($authtext) == "") {
+			$url = do_shortcode($content); // return unlinked content (value between start and end tag)
+		} else {
+			$url = do_shortcode($authtext); // return authtext (value of attribute, if set)
+		}
 	} else {
 		// url = moodle_url + "?data=" + <encrypted-value>
-		$url = '<a target="'.esc_attr($target).'" class="'.esc_attr($class).'" href="'.wp2moodle_generate_hyperlink($cohort,$group).'">'.do_shortcode($content).'</a>';
+		$url = '<a target="'.esc_attr($target).'" class="'.esc_attr($class).'" href="'.wp2moodle_generate_hyperlink($cohort,$group).'">'.do_shortcode($content).'</a>'; // hyperlinked content
 	}		
 	return $url;
 }
