@@ -13,6 +13,7 @@
 	<li><em>cohort</em>: optional, idnumber of the cohort in which to enrol a user at the moodle end. You can specify multiple values using comma seperated strings.</li>
 	<li><em>group</em>: optional, idnumber of the group in which to enrol a user at the moodle end (typically you use group <i>or</i> cohort). You can specify multiple values using comma seperated strings.</li>
 	<li><em>target</em>: optional, defaults to '_self'; href target attribute of link</li>
+        <li><em>course</em>: optional, id of the course the user should be enrolled in, you can specify multiple courses using comma seperated strings.</li>
 	<li><em>authtext</em>: optional, defaults to content between shortcode tags; string to display if not yet logged on</li>
 </ul>
 <p class="description">Note: The link that is generated is timestamped and will expire, so it cannot be bookmarked or hijacked. You must set the expiry time in the Moodle plugin. You should allow reading time of the page when considering a timeout value, since the link is generated when the page is loaded, not when the link is clicked. </p>
