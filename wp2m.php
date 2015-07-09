@@ -13,7 +13,7 @@ License: GPL2
 /*  Copyright 2012-2015
 
     This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
+    it under the terms of the GNU General Public License, version 2, as
     published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
@@ -91,7 +91,7 @@ function wp2m_uninstall() {
  * Creates a sub menu in the settings menu for the Link2Moodle settings
  */
 function wp2m_create_menu() {
-	add_menu_page( 
+	add_menu_page(
 		__('wp2Moodle', EMU2_I18N_DOMAIN),
 		__('wp2Moodle', EMU2_I18N_DOMAIN),
 		'administrator',
@@ -114,7 +114,7 @@ function wp2m_register_settings() {
 /**
  * Given a string and key, return the encrypted version (hard coded to use rijndael because it's tough)
  */
-function encrypt_string($value, $key) { 
+function encrypt_string($value, $key) {
 	if (!$value) {return "";}
 	$text = $value;
 	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
@@ -134,7 +134,7 @@ function encrypt_string($value, $key) {
  * when unauthenticated just returns the inner content (e.g. my link text) without a link
  */
 function wp2moodle_handler( $atts, $content = null ) {
-	
+
 	// clone attribs over any default values, builds variables out of them so we can use them below
 	// $class => css class to put on link we build
 	// $cohort => text id of the moodle cohort in which to enrol this user
@@ -147,7 +147,7 @@ function wp2moodle_handler( $atts, $content = null ) {
 		"target" => '_self',
 		"authtext" => ''
 	), $atts));
-	
+
 	if ($content == null || !is_user_logged_in() ) {
 		if (trim($authtext) == "") {
 			$url = do_shortcode($content); // return unlinked content (value between start and end tag)
@@ -157,8 +157,30 @@ function wp2moodle_handler( $atts, $content = null ) {
 	} else {
 		// url = moodle_url + "?data=" + <encrypted-value>
 		$url = '<a target="'.esc_attr($target).'" class="'.esc_attr($class).'" href="'.wp2moodle_generate_hyperlink($cohort,$group).'">'.do_shortcode($content).'</a>'; // hyperlinked content
-	}		
+	}
 	return $url;
+}
+
+add_filter('mp_download_url', 'mp_custom_download_url', 10, 3);
+
+function mp_custom_download_url($url, $order, $download) {
+
+echo "url: ". print_r($url, true) . "\n";
+echo "order: ". print_r($order, true) . "\n";
+echo "download: ". print_r($download, true) . "\n";
+
+	$url = wp2moodle_generate_hyperlink("","");
+	// use parameters to generate custom download url and return it
+	return $url;
+}
+
+/*
+How do I remove the unnecessary items such as shipping, downloaded products, etc. from the product creation page as they only serve to confuse the teachers?
+*/
+add_action('add_meta_boxes_product','remove_unwanted_mp_meta_boxes',999);
+function remove_unwanted_mp_meta_boxes() {
+	remove_meta_box('mp-meta-shipping','product','normal');
+    remove_meta_box('mp-meta-download','product','normal');
 }
 
 /*
@@ -171,7 +193,7 @@ function wp2moodle_generate_hyperlink($cohort,$group) {
     get_currentuserinfo();
 
 	$update = get_option('wp2m_update_details') ?: "true";
-    
+
     $enc = array(
 		"offset" => rand(1234,5678),						// set first to randomise the encryption when this string is encoded
 		"stamp" => time(),									// unix timestamp so we can check that the link isn't expired
@@ -185,10 +207,10 @@ function wp2moodle_generate_hyperlink($cohort,$group) {
 		"group" => $group,									// string containing group to enrol this user into
 		"updatable" => $update								// if user profile fields can be updated in moodle
 	);
-	
+
 	// encode array as querystring
 	$details = http_build_query($enc);
-	
+
 	// encryption = 3des using shared_secret
 	return get_option('wp2m_moodle_url').WP2M_MOODLE_PLUGIN_URL.encrypt_string($details, get_option('wp2m_shared_secret'));
 	//return get_option('wp2m_moodle_url').WP2M_MOODLE_PLUGIN_URL.'=>'.$details;
