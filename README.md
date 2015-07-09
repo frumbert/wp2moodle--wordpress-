@@ -9,6 +9,14 @@ Go to my wordpress demo site and register yourself, then try the links.
 
 http://wordpress.frumbert.org/
 
+E-Commerce integration (New!)
+----------------------
+This plugin automatically integrates with MarketPress. All you need to do is upload a text file as your digital download that contains the group and/or cohort names you want the user to enrol into, and it's business as usual. So you might have a file called "HistoryCourse-wp2moodle.txt" which contains the following lines:
+    
+    cohort=History101
+    group=semester2_2015
+
+Upload this file as your digital download, and that's all. A sale will cause a 301 redirect to the configured Moodle server with the SSO token.
 
 Activating and configuring the plugin
 -------------------------------
