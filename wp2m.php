@@ -3,14 +3,14 @@
 Plugin Name: wp2moodle
 Plugin URI: https://github.com/frumbert/wp2moodle--wordpress-
 Description: A plugin that sends the authenticated users details to a moodle site for authentication, enrols them in the specified cohort
-Requires: Moodle 2.2 site with the wp2moodle (Moodle) auth plugin enabled
-Version: 1.5
+Requires: Moodle 2.2+ site with the wp2moodle (Moodle) auth plugin enabled (tested up to Moodle 2.8, Wordpress 4.1)
+Version: 1.6
 Author: Tim St.Clair
 Author URI: http://timstclair.me
 License: GPL2
 */
 
-/*  Copyright 2012-2014
+/*  Copyright 2012-2015
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
