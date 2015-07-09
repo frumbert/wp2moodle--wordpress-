@@ -3,8 +3,8 @@
 Plugin Name: wp2moodle
 Plugin URI: https://github.com/frumbert/wp2moodle--wordpress-
 Description: A plugin that sends the authenticated users details to a moodle site for authentication, enrols them in the specified cohort
-Requires: Moodle 2.2+ site with the wp2moodle (Moodle) auth plugin enabled (tested up to Moodle 2.8, Wordpress 4.1)
-Version: 1.6
+Requires: Moodle 2.2+ site with the wp2moodle (Moodle) auth plugin enabled (tested up to Moodle 2.8.7, Wordpress 4.2)
+Version: 1.7
 Author: Tim St.Clair
 Author URI: http://timstclair.me
 License: GPL2
@@ -30,7 +30,7 @@ License: GPL2
 // some definition we will use
 define( 'WP2M_PUGIN_NAME', 'Wordpress 2 Moodle (SSO)');
 define( 'WP2M_PLUGIN_DIRECTORY', 'wp2moodle');
-define( 'WP2M_CURRENT_VERSION', '1.5' );
+define( 'WP2M_CURRENT_VERSION', '1.7' );
 define( 'WP2M_CURRENT_BUILD', '1' );
 define( 'EMU2_I18N_DOMAIN', 'wp2m' );
 define( 'WP2M_MOODLE_PLUGIN_URL', '/auth/wp2moodle/login.php?data=');
@@ -161,27 +161,46 @@ function wp2moodle_handler( $atts, $content = null ) {
 	return $url;
 }
 
+// over-ride the url for Marketpress *if* the download is a file named something-wp2moodle.txt
+// the contents of the file contain the cohort and group to enrol into, just like the shortcode
 add_filter('mp_download_url', 'mp_custom_download_url', 10, 3);
-
 function mp_custom_download_url($url, $order, $download) {
 
-echo "url: ". print_r($url, true) . "\n";
-echo "order: ". print_r($order, true) . "\n";
-echo "download: ". print_r($download, true) . "\n";
-
-	$url = wp2moodle_generate_hyperlink("","");
-	// use parameters to generate custom download url and return it
+	if (strpos($url, 'wp2moodle.txt') !== false) {
+		// mp url is full url = including http:// and so on... we want the file url
+		$path = $_SERVER["DOCUMENT_ROOT"] . explode($_SERVER["SERVER_NAME"], $url)[1];
+		$cohort = "";
+		$group = "";
+		$data = file($path); // now it's an array!
+		foreach ($data as $row) {
+			$pair = explode("=",$row);
+			switch (strtolower(trim($pair[0]))) {
+				case "group":
+					$group = trim(str_replace(array('\'','"'), '', $pair[1]));
+					break;
+				case "cohort":
+					$cohort = trim(str_replace(array('\'','"'), '', $pair[1]));
+					break;
+			}
+		}
+		$url = wp2moodle_generate_hyperlink($cohort,$group);
+		if (ob_get_contents()) { ob_clean(); }
+		header('Location: ' . $url, true, 301); // redirect to this url
+		exit();
+	}
 	return $url;
 }
 
 /*
-How do I remove the unnecessary items such as shipping, downloaded products, etc. from the product creation page as they only serve to confuse the teachers?
-*/
+If you are only using wp2moodle and not offering other marketpress products, you can hide the shipping info like this:
 add_action('add_meta_boxes_product','remove_unwanted_mp_meta_boxes',999);
 function remove_unwanted_mp_meta_boxes() {
+	// shipping meta box
 	remove_meta_box('mp-meta-shipping','product','normal');
-    remove_meta_box('mp-meta-download','product','normal');
+	// download file box
+    	// remove_meta_box('mp-meta-download','product','normal');
 }
+*/
 
 /*
  * Function to build the encrypted hyperlink
@@ -195,7 +214,7 @@ function wp2moodle_generate_hyperlink($cohort,$group) {
 	$update = get_option('wp2m_update_details') ?: "true";
 
     $enc = array(
-		"offset" => rand(1234,5678),						// set first to randomise the encryption when this string is encoded
+		"offset" => rand(1234,5678),						// just some junk data to mix into the encryption
 		"stamp" => time(),									// unix timestamp so we can check that the link isn't expired
 		"firstname" => $current_user->user_firstname,		// first name
 		"lastname" => $current_user->user_lastname,			// last name
@@ -205,14 +224,14 @@ function wp2moodle_generate_hyperlink($cohort,$group) {
 		"idnumber" => $current_user->ID,					// int id of user in this db (for user matching on services, etc)
 		"cohort" => $cohort,								// string containing cohort to enrol this user into
 		"group" => $group,									// string containing group to enrol this user into
-		"updatable" => $update								// if user profile fields can be updated in moodle
+		"updatable" => $update,								// if user profile fields can be updated in moodle
 	);
 
 	// encode array as querystring
 	$details = http_build_query($enc);
 
 	// encryption = 3des using shared_secret
-	return get_option('wp2m_moodle_url').WP2M_MOODLE_PLUGIN_URL.encrypt_string($details, get_option('wp2m_shared_secret'));
+	return rtrim(get_option('wp2m_moodle_url'),"/").WP2M_MOODLE_PLUGIN_URL.encrypt_string($details, get_option('wp2m_shared_secret'));
 	//return get_option('wp2m_moodle_url').WP2M_MOODLE_PLUGIN_URL.'=>'.$details;
 }
 
