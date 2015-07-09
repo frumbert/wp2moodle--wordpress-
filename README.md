@@ -32,15 +32,15 @@ Note: If the user is not yet authenticated, no hyperlink is rendered. The link d
 Shortcode examples
 ------------------
 
-[wp2moodle class='my-class' cohort='course1' target='_blank']<img src='path.gif'>Open my course[/wpmoodle]
+`[wp2moodle class='my-class' cohort='course1' target='_blank']<img src='path.gif'>Open my course[/wpmoodle]`
 
-[wp2moodle group='group2']A hyperlink[/wp2moodle]
+`[wp2moodle group='group2']A hyperlink[/wp2moodle]`
 
-class: the css classname to apply to the link (default: wp2moodle)
-target: the hyperlink target name to apply to the link (defaut: _self)
-cohort: (optional) the id [mdl_cohort.idnumber] of the moodle cohort in which to enrol the user (can be a comma-seperated list for multiple enrolments)
-group: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user (can be a comma-seperated list for multiple enrolments)
-authtext: (optional) the text that appears instead when the user is not yet logged on
+`class`: the css classname to apply to the link (default: wp2moodle)
+`target`: the hyperlink target name to apply to the link (defaut: _self)
+`cohort`: (optional) the id [mdl_cohort.idnumber] of the moodle cohort in which to enrol the user (can be a comma-seperated list for multiple enrolments)
+`group`: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user (can be a comma-seperated list for multiple enrolments)
+`authtext`: (optional) the text that appears instead when the user is not yet logged on
 
 Licence:
 --------
