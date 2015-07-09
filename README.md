@@ -9,6 +9,14 @@ Go to my wordpress demo site and register yourself, then try the links.
 
 http://wordpress.frumbert.org/
 
+E-Commerce integration (New!)
+----------------------
+This plugin automatically integrates with MarketPress. All you need to do is upload a text file as your digital download that contains the group and/or cohort names you want the user to enrol into, and it's business as usual. So you might have a file called "HistoryCourse-wp2moodle.txt" which contains the following lines:
+    
+    cohort=History101
+    group=semester2_2015
+
+Upload this file as your digital download, and that's all. A sale will cause a 301 redirect to the configured Moodle server with the SSO token.
 
 Activating and configuring the plugin
 -------------------------------
@@ -32,15 +40,15 @@ Note: If the user is not yet authenticated, no hyperlink is rendered. The link d
 Shortcode examples
 ------------------
 
-[wp2moodle class='my-class' cohort='course1' target='_blank']<img src='path.gif'>Open my course[/wpmoodle]
+`[wp2moodle class='my-class' cohort='course1' target='_blank']<img src='path.gif'>Open my course[/wpmoodle]`
 
-[wp2moodle group='group2']A hyperlink[/wp2moodle]
+`[wp2moodle group='group2']A hyperlink[/wp2moodle]`
 
-class: the css classname to apply to the link (default: wp2moodle)
-target: the hyperlink target name to apply to the link (defaut: _self)
-cohort: (optional) the id [mdl_cohort.idnumber] of the moodle cohort in which to enrol the user (can be a comma-seperated list for multiple enrolments)
-group: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user (can be a comma-seperated list for multiple enrolments)
-authtext: (optional) the text that appears instead when the user is not yet logged on
+`class`: the css classname to apply to the link (default: wp2moodle)
+`target`: the hyperlink target name to apply to the link (defaut: _self)
+`cohort`: (optional) the id [mdl_cohort.idnumber] of the moodle cohort in which to enrol the user (can be a comma-seperated list for multiple enrolments)
+`group`: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user (can be a comma-seperated list for multiple enrolments)
+`authtext`: (optional) the text that appears instead when the user is not yet logged on
 
 Licence:
 --------
