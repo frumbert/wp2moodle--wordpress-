@@ -139,10 +139,12 @@ function wp2moodle_handler( $atts, $content = null ) {
 	// $class => css class to put on link we build
 	// $cohort => text id of the moodle cohort in which to enrol this user
 	// $group => text id of the moodle group in which to enrol this user
+	// $course => text id of the course, if you just want to enrol a user directly to a course
 	// $authtext => string containing text content to display when not logged on (defaults to content between tags when empty / missing)
 	extract(shortcode_atts(array(
 		"cohort" => '',
 		"group" => '',
+		"course" => '',
 		"class" => 'wp2moodle',
 		"target" => '_self',
 		"authtext" => ''
@@ -156,15 +158,27 @@ function wp2moodle_handler( $atts, $content = null ) {
 		}
 	} else {
 		// url = moodle_url + "?data=" + <encrypted-value>
-		$url = '<a target="'.esc_attr($target).'" class="'.esc_attr($class).'" href="'.wp2moodle_generate_hyperlink($cohort,$group).'">'.do_shortcode($content).'</a>'; // hyperlinked content
+		$url = '<a target="'.esc_attr($target).'" class="'.esc_attr($class).'" href="'.wp2moodle_generate_hyperlink($cohort,$group,$course).'">'.do_shortcode($content).'</a>'; // hyperlinked content
 	}
 	return $url;
 }
 
+// wp2m filters are set at higher priority so they execute first
+
 // over-ride the url for Marketpress *if* the download is a file named something-wp2moodle.txt
-// the contents of the file contain the cohort and group to enrol into, just like the shortcode
-add_filter('mp_download_url', 'mp_custom_download_url', 10, 3);
-function mp_custom_download_url($url, $order, $download) {
+add_filter('mp_download_url', 'wp2m_download_url', 10, 3);
+
+// over-ride the url for WooCommerce *if* the download is a file named something-wp2moodle.txt
+add_filter('woocommerce_download_file_redirect','woo_wp2m_download_url', 5, 2);
+add_filter('woocommerce_download_file_force','woo_wp2m_download_url', 5, 2);
+
+// woo shim to handle different arguments
+function woo_wp2m_download_url($filepath, $filename) {
+	wp2m_download_url($filepath, "", "");
+}
+
+// the download file is actually a text file containing the shortcode values
+function wp2m_download_url($url, $order, $download) {
 
 	if (strpos($url, 'wp2moodle.txt') !== false) {
 		// mp url is full url = including http:// and so on... we want the file url
@@ -181,9 +195,12 @@ function mp_custom_download_url($url, $order, $download) {
 				case "cohort":
 					$cohort = trim(str_replace(array('\'','"'), '', $pair[1]));
 					break;
+				case "course":
+					$cohort = trim(str_replace(array('\'','"'), '', $pair[1]));
+					break;
 			}
 		}
-		$url = wp2moodle_generate_hyperlink($cohort,$group);
+		$url = wp2moodle_generate_hyperlink($cohort,$group,$course);
 		if (ob_get_contents()) { ob_clean(); }
 		header('Location: ' . $url, true, 301); // redirect to this url
 		exit();
@@ -205,7 +222,7 @@ function remove_unwanted_mp_meta_boxes() {
 /*
  * Function to build the encrypted hyperlink
  */
-function wp2moodle_generate_hyperlink($cohort,$group) {
+function wp2moodle_generate_hyperlink($cohort,$group,$course) {
 
 	// needs authentication; ensure userinfo globals are populated
 	global $current_user;
@@ -224,6 +241,7 @@ function wp2moodle_generate_hyperlink($cohort,$group) {
 		"idnumber" => $current_user->ID,					// int id of user in this db (for user matching on services, etc)
 		"cohort" => $cohort,								// string containing cohort to enrol this user into
 		"group" => $group,									// string containing group to enrol this user into
+		"course" => $course,								// string containing course id, optional
 		"updatable" => $update,								// if user profile fields can be updated in moodle
 	);
 
