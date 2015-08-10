@@ -7,8 +7,7 @@ Demo / Further documenation
 ---------------------------
 Go to my wordpress demo site and register yourself, then try the links.
 
-~~http://wordpress.frumbert.org/~~
-29.July.2015 - Temporarily offline due to bodgy web host kerfuffle
+http://wordpress.frumbert.org/
 
 E-Commerce integration (New!)
 ----------------------
