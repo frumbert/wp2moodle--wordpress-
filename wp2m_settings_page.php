@@ -11,6 +11,7 @@
 <li><code>group</code>: optional, idnumber of the group in which to enrol a user at the moodle end (typically you use group <i>or</i> cohort). You can specify multiple values using comma seperated strings. <code>[wp2moodle group='eng14_a,math14_b,hist13_c']Math, English & History[/wp2moodle]</code></li>
 <li><code>target</code>: optional, defaults to '_self'; href target attribute of link</li>
 <li><code>authtext</code>: optional, defaults to content between shortcode tags; string to display if not yet logged on</li>
+<li><code>activity</code>: optional, numerical index of the first activity to open (> 0) if auto-open is enabled in the Moodle plugin</li>
 </ul>
 <p class="description">Note: The link that is generated is timestamped and will expire, so it cannot be bookmarked or hijacked. You must set the expiry time in the Moodle plugin. You should allow reading time of the page when considering a timeout value, since the link is generated when the page is loaded, not when the link is clicked. </p>
 <h3>MarketPress</h3>
