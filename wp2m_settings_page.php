@@ -13,8 +13,8 @@
 <li><code>authtext</code>: optional, defaults to content between shortcode tags; string to display if not yet logged on</li>
 </ul>
 <p class="description">Note: The link that is generated is timestamped and will expire, so it cannot be bookmarked or hijacked. You must set the expiry time in the Moodle plugin. You should allow reading time of the page when considering a timeout value, since the link is generated when the page is loaded, not when the link is clicked. </p>
-<h3>MarketPress</h3>
-<p>Selling with MarketPress? Well here's a trick. Create a file called "yourproduct-wp2moodle.txt" (it has to <strong>end with</strong> <code>wp2moodle.txt</code>) and write these lines into it, replacing or erasing as needed:
+<h3>MarketPress, WooCommerce?</h3>
+<p>Selling with MarketPress or WooCommerce? Well here's a trick. Create a file called "yourproduct-wp2moodle.txt" (it has to <strong>end with</strong> <code>wp2moodle.txt</code>) and write these lines into it, replacing or erasing as needed:
 <pre>
     group=group2
     cohort=class1
