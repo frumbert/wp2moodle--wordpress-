@@ -182,7 +182,7 @@ function wp2m_download_url($url, $order, $download) {
 
 	if (strpos($url, 'wp2moodle.txt') !== false) {
 		// mp url is full url = including http:// and so on... we want the file url
-		$path = $_SERVER["DOCUMENT_ROOT"] . explode($_SERVER["SERVER_NAME"], $url)[1];
+		$path = $_SERVER['DOCUMENT_ROOT'] . parse_url($url)["path"];
 		$cohort = "";
 		$group = "";
 		$data = file($path); // now it's an array!
