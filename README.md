@@ -51,6 +51,10 @@ Shortcode examples
 `group`: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user (can be a comma-seperated list for multiple enrolments)
 `authtext`: (optional) the text that appears instead when the user is not yet logged on
 
+Requirements:
+-------------
+*mcrypt* needs to be present and available in your php installation.
+
 Licence:
 --------
 GPL2, as per Moodle.
