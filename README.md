@@ -1,7 +1,7 @@
 wp2moodle--wordpress-
 =====================
 
-Wordpress to Moodle pass through authentication plugin (wordpress end). Takes the user that is logged onto wordpress and passes their details over to Moodle, enrols them and authenticates.
+Wordpress to Moodle pass through authentication plugin (wordpress end). Takes the user that is logged onto wordpress and passes their details over to Moodle, authenticates them, enrols them in one or more courses, then opens the course.
 
 Demo / Further documenation
 ---------------------------
@@ -12,7 +12,7 @@ http://wordpress.frumbert.org/
 E-Commerce integration (New!)
 ----------------------
 This plugin automatically integrates with MarketPress and WooCommerce. All you need to do is upload a text file as your digital download that contains the group and/or cohort names you want the user to enrol into, and it's business as usual. So you might have a file called "HistoryCourse-wp2moodle.txt" which contains your passthrough parameters, for instance:
-    
+
     cohort=History101
     group=semester2_2015
     course=abc123
@@ -33,10 +33,10 @@ Note, you must to rename the zip to be just 'wp2moodle.zip' before you upload th
 How to use the plugin
 ------------------
 1. Edit a post or a page
-2. Use the moodle button on the editor to insert shortcodes around the text you want linked
+2. Use the moodle button on the editor to insert the shortcode block around the text you want linked
 3. When authenticated as subscriber, contributor, etc, click on the link.
 
-Note: If the user is not yet authenticated, no hyperlink is rendered. The link does not function for Wordpress admins.
+Note: If the user is not yet authenticated, no hyperlink is rendered. It's also best to avoid linking the admin accounts.
 
 Shortcode examples
 ------------------
@@ -49,7 +49,9 @@ Shortcode examples
 `target`: the hyperlink target name to apply to the link (defaut: _self)
 `cohort`: (optional) the id [mdl_cohort.idnumber] of the moodle cohort in which to enrol the user (can be a comma-seperated list for multiple enrolments)
 `group`: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user (can be a comma-seperated list for multiple enrolments)
+`course`: (optional) the id [mdl_courses.idnumber] of the moodle course in which to enrol the user (can be a comma-seperated list for multiple enrolments)
 `authtext`: (optional) the text that appears instead when the user is not yet logged on
+`activity`: (optional, number) the numerical index of an activity to open after enrolment. E.g. "2" will attempt to open the second activity in the destination course.
 
 Requirements:
 -------------
