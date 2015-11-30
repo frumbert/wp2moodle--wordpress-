@@ -7,7 +7,7 @@ Demo / Further documenation
 ---------------------------
 Go to my wordpress demo site and register yourself, then try the links.
 
-http://wordpress.frumbert.org/
+http://wp2moodle.coursesuite.ninja/
 
 E-Commerce integration (New!)
 ----------------------
