@@ -27,7 +27,7 @@ Note, you must to rename the zip to be just 'wp2moodle.zip' before you upload th
 2. Activate the plugin
 3. Click wp2moodle on the wordpress menu
 4. Set your moodle url (e.g. http://your-site.com/moodle/)
-5. Set the shared secret. This is a salt that is used to encrypt data that is sent to Moodle. Using a guid (http://newguid.com) is a good idea. It must match the shared secret that you use on the Moodle plugin. (https://github.com/frumbert/wp2moodle-moodle)
+5. Set the shared secret. This is a salt that is used to encrypt data that is sent to Moodle. Using a guid (http://www.newguid.org/) is a good idea. It must match the shared secret that you use on the Moodle plugin. (https://github.com/frumbert/wp2moodle-moodle)
 6. Other instructions are available on the settings page.
 
 How to use the plugin
