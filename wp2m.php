@@ -4,13 +4,13 @@ Plugin Name: wp2moodle
 Plugin URI: https://github.com/frumbert/wp2moodle--wordpress-
 Description: A plugin that sends the authenticated users details to a moodle site for authentication, enrols them in the specified cohort
 Requires: Moodle site with the wp2moodle auth plugin enabled (tested up to Moodle 3.1, Wordpress 4.4)
-Version: 1.8
+Version: 1.9
 Author: Tim St.Clair
 Author URI: http://frumbert.org
 License: GPL2
 */
 
-/*  Copyright 2012-2015
+/*  Copyright 2012-2017
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -30,7 +30,7 @@ License: GPL2
 // some definition we will use
 define( 'WP2M_PUGIN_NAME', 'Wordpress 2 Moodle (SSO)');
 define( 'WP2M_PLUGIN_DIRECTORY', 'wp2moodle');
-define( 'WP2M_CURRENT_VERSION', '1.8' );
+define( 'WP2M_CURRENT_VERSION', '1.9' );
 define( 'WP2M_CURRENT_BUILD', '1' );
 define( 'EMU2_I18N_DOMAIN', 'wp2m' );
 define( 'WP2M_MOODLE_PLUGIN_URL', '/auth/wp2moodle/login.php?data=');
@@ -63,12 +63,19 @@ register_uninstall_hook(__FILE__, 'wp2m_uninstall');
 add_action ( 'init', 'wp2m_register_shortcode');
 add_action ( 'init', 'wp2m_register_addbutton');
 
+function wp2m_generate_encryption_key() {
+	return base64_encode(openssl_random_pseudo_bytes(32));
+}
+
 /**
  * activating the default values
  */
 function wp2m_activate() {
+
+	$shared_secret = wp2m_generate_encryption_key();
+
 	add_option('wp2m_moodle_url', 'http://localhost/moodle');
-	add_option('wp2m_shared_secret', 'enter a random sequence of letters, numbers and symbols here');
+	add_option('wp2m_shared_secret', $shared_secret);
 	add_option('wp2m_update_details', 'true');
 }
 
@@ -115,24 +122,34 @@ function wp2m_register_settings() {
 }
 
 /**
- * Given a string and key, return the encrypted version (hard coded to use rijndael because it's tough)
+ * Given a string and key, return the encrypted version (openssl is "good enough" for this type of data, and comes with modern php)
  */
 function encrypt_string($value, $key) {
-	if (!$value) {return "";}
-	$text = $value;
-	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
-	$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-	$crypttext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, md5($key.$key), $text, MCRYPT_MODE_ECB, $iv);
+	if ( base64_encode(base64_decode($key)) === $key){
+		$encryption_key = base64_decode($key);
+	} else {
+		$encryption_key = $key;
+	}
+	$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+	$encrypted = openssl_encrypt($value, 'aes-256-cbc', $encryption_key, 0, $iv);
+	$result = str_replace(array('+','/','='),array('-','_',''),base64_encode($encrypted . '::' . $iv));
+	return $result;
+}
 
-	// encode data so that $_GET won't urldecode it and mess up some characters
-	$data = base64_encode($crypttext);
-    $data = str_replace(array('+','/','='),array('-','_',''),$data);
-    return trim($data);
+/* Not required in this plugin, but here's how you do it */
+function decrypt_string($data, $key) {
+	if ( base64_encode(base64_decode($key)) === $key){
+		$encryption_key = base64_decode($key);
+	} else {
+		$encryption_key = $key;
+	}
+	list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
+	return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
 }
 
 
 /**
- * handler for the plugins shortcode (e.g. [link2moodle cohort='abc123']my link text[/link2moodle])
+ * handler for the plugins shortcode (e.g. [wp2moodle cohort='abc123']my link text[/wp2moodle])
  * note: applies do_shortcode() to content to allow other plugins to be handled on links
  * when unauthenticated just returns the inner content (e.g. my link text) without a link
  */
@@ -173,9 +190,10 @@ function wp2moodle_handler( $atts, $content = null ) {
 // over-ride the url for Marketpress *if* the download is a file named something-wp2moodle.txt
 add_filter('mp_download_url', 'wp2m_download_url', 10, 3);
 
-// over-ride the url for WooCommerce *if* the download is a file named something-wp2moodle.txt
+// over-ride the url for WooCommerce (has various download filters we have to try)
 add_filter('woocommerce_download_file_redirect','woo_wp2m_download_url', 5, 2);
 add_filter('woocommerce_download_file_force','woo_wp2m_download_url', 5, 2);
+add_filter('woocommerce_download_file_xsendfile','woo_wp2m_download_url', 5, 2);
 
 // woo shim to handle different arguments
 function woo_wp2m_download_url($filepath, $filename) {
