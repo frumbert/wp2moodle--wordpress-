@@ -1,7 +1,7 @@
 wp2moodle--wordpress-
 =====================
 
-Wordpress to Moodle pass through authentication plugin (wordpress end). Takes the user that is logged onto wordpress and passes their details over to Moodle, authenticates them, enrols them in one or more courses, then opens the course.
+Wordpress to Moodle pass through authentication plugin (wordpress end). Takes the user that is logged onto wordpress and passes their details over to Moodle (encrypted using openssl), authenticates them, enrols them in one or more courses, then opens the course.
 
 Demo / Further documenation
 ---------------------------
@@ -55,7 +55,7 @@ Shortcode examples
 
 Requirements:
 -------------
-*mcrypt* needs to be present and available in your php installation.
+*openssl* needs to be present and available in your php installation.
 
 Licence:
 --------

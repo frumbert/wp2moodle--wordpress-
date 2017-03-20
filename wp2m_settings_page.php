@@ -8,9 +8,9 @@
 <div class="wrap">
 
 
-<?php if (!extension_loaded('mcrypt')) { ?>
+<?php if (!extension_loaded('openssl')) { ?>
     <div class="wp2m-error">
-    <h2>Warning!</h2><p>The <em>mcrypt</em> php extension has not been detected. You'll need to fix your PHP configuration before this plugin will operate.</p>
+    <h2>Warning!</h2><p>The <em>openssl</em> php extension has not been detected. You'll need to fix your PHP configuration before this plugin will operate.</p>
     </div>
 <?php } ?>
 
@@ -37,8 +37,10 @@
 <h3>MarketPress or WooCommerce?</h3>
 <p>Selling with MarketPress or WooCommerce? Create a text file called "yourcourse-wp2moodle.txt" (actually, the name only has to <strong>end with</strong> <code>-wp2moodle.txt</code>; the name before that can be whatever you like) and write ay attributes (shown above) on their own lines into it, like this:</p>
 <table class="wp2m-table">
-    <tr><td><code>group=maths102_sem2</code></td></tr>
-    <tr><td><code>cohort=2015allCourses</code></td></tr>
+    <tr><td>
+        <code>group=maths102_sem2</code><br>
+        <code>cohort=2015allCourses</code>
+    </td></tr>
 </table>
 <?php } ?>
 <p>Upload this file as your digital download for the product. Then, after a purchase instead of a download, they will redirect to your Moodle site with an authentication token just like a shortcode link. Pretty neat, huh?</p>
@@ -57,9 +59,9 @@
         </tr>
 
         <tr valign="top">
-            <th scope="row">Encryption secret</th>
+            <th scope="row">Encryption secret<br><span style='font-weight:normal'>Must match Moodle</span></th>
             <td><input type="text" name="wp2m_shared_secret" value="<?php echo get_option('wp2m_shared_secret'); ?>" size="60" />
-            <div class="description">Must match setting on Moodle plugin; a <a href="http://createguid.com/" target="_blank">GUID</a> makes a good key.</div>
+            <div class="description">Here is a freshly generated secure key: <code><?php echo base64_encode(openssl_random_pseudo_bytes(32)); ?></code>.</div>
             </td>
         </tr>
 
