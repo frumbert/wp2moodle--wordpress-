@@ -3,10 +3,10 @@
 Plugin Name: wp2moodle
 Plugin URI: https://github.com/frumbert/wp2moodle--wordpress-
 Description: A plugin that sends the authenticated users details to a moodle site for authentication, enrols them in the specified cohort
-Requires: Moodle 2.2+ site with the wp2moodle (Moodle) auth plugin enabled (tested up to Moodle 2.8.7, Wordpress 4.2)
-Version: 1.7
+Requires: Moodle site with the wp2moodle auth plugin enabled (tested up to Moodle 3.1, Wordpress 4.4)
+Version: 1.8
 Author: Tim St.Clair
-Author URI: http://timstclair.me
+Author URI: http://frumbert.org
 License: GPL2
 */
 
@@ -30,7 +30,7 @@ License: GPL2
 // some definition we will use
 define( 'WP2M_PUGIN_NAME', 'Wordpress 2 Moodle (SSO)');
 define( 'WP2M_PLUGIN_DIRECTORY', 'wp2moodle');
-define( 'WP2M_CURRENT_VERSION', '1.7' );
+define( 'WP2M_CURRENT_VERSION', '1.8' );
 define( 'WP2M_CURRENT_BUILD', '1' );
 define( 'EMU2_I18N_DOMAIN', 'wp2m' );
 define( 'WP2M_MOODLE_PLUGIN_URL', '/auth/wp2moodle/login.php?data=');
@@ -45,24 +45,27 @@ function wp2m_set_lang_file() {
 
 	}
 }
+
 wp2m_set_lang_file();
 
-//shortcodes - register the shortcode this plugin uses and the handler to insert it
-add_shortcode('wp2moodle', 'wp2moodle_handler');
+function wp2m_register_shortcode() {
+	add_shortcode('wp2moodle', 'wp2moodle_handler');
+}
 
-// actions - register the plugin itself, it's settings pages and its wordpress hooks
+/**
+ * actions - register the plugin itself, it's settings pages and its wordpress hooks
+ */
 add_action( 'admin_menu', 'wp2m_create_menu' );
 add_action( 'admin_init', 'wp2m_register_settings' );
 register_activation_hook(__FILE__, 'wp2m_activate');
 register_deactivation_hook(__FILE__, 'wp2m_deactivate');
 register_uninstall_hook(__FILE__, 'wp2m_uninstall');
-
-// on page load, init the handlers for the editor to insert the shortcodes (javascript)
-add_action('init', 'wp2m_add_button');
+add_action ( 'init', 'wp2m_register_shortcode');
+add_action ( 'init', 'wp2m_register_addbutton');
 
 /**
  * activating the default values
-*/
+ */
 function wp2m_activate() {
 	add_option('wp2m_moodle_url', 'http://localhost/moodle');
 	add_option('wp2m_shared_secret', 'enter a random sequence of letters, numbers and symbols here');
@@ -262,7 +265,7 @@ function wp2moodle_generate_hyperlink($cohort,$group,$course,$activity = 0) {
 /**
  * initialiser for registering scripts to the rich editor
  */
-function wp2m_add_button() {
+function wp2m_register_addbutton() {
 	if ( current_user_can('edit_posts') &&  current_user_can('edit_pages') ) {
 	    add_filter('mce_external_plugins', 'wp2m_add_plugin');
 	    add_filter('mce_buttons', 'wp2m_register_button');
