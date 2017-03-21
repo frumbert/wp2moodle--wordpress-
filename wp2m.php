@@ -67,6 +67,17 @@ function wp2m_generate_encryption_key() {
 	return base64_encode(openssl_random_pseudo_bytes(32));
 }
 
+function wp2m_is_base64($string) {
+    $decoded = base64_decode($string, true);
+    // Check if there is no invalid character in string
+    if (!preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string)) return false;
+    // Decode the string in strict mode and send the response
+    if (!base64_decode($string, true)) return false;
+    // Encode and compare it to original one
+    if (base64_encode($decoded) != $string) return false;
+    return true;
+}
+
 /**
  * activating the default values
  */
@@ -125,7 +136,7 @@ function wp2m_register_settings() {
  * Given a string and key, return the encrypted version (openssl is "good enough" for this type of data, and comes with modern php)
  */
 function encrypt_string($value, $key) {
-	if ( base64_encode(base64_decode($key)) === $key){
+	if (wp2m_is_base64($key)) {
 		$encryption_key = base64_decode($key);
 	} else {
 		$encryption_key = $key;
@@ -138,7 +149,7 @@ function encrypt_string($value, $key) {
 
 /* Not required in this plugin, but here's how you do it */
 function decrypt_string($data, $key) {
-	if ( base64_encode(base64_decode($key)) === $key){
+	if (wp2m_is_base64($key)) {
 		$encryption_key = base64_decode($key);
 	} else {
 		$encryption_key = $key;
