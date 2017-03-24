@@ -118,7 +118,7 @@ function wp2m_create_menu() {
 		'administrator',
 		WP2M_PLUGIN_DIRECTORY.'/wp2m_settings_page.php',
 		'',
-		plugins_url('wp2moodle/icon.png', WP2M_PLUGIN_DIRECTORY) //__FILE__));
+		plugins_url('wp2moodle/icon.svg', WP2M_PLUGIN_DIRECTORY) //__FILE__));
 	);
 }
 
