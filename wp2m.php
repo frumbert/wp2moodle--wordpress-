@@ -118,7 +118,7 @@ function wp2m_create_menu() {
 		'administrator',
 		WP2M_PLUGIN_DIRECTORY.'/wp2m_settings_page.php',
 		'',
-		plugins_url('wp2moodle/icon.png', WP2M_PLUGIN_DIRECTORY) //__FILE__));
+		plugins_url('wp2moodle/icon.svg', WP2M_PLUGIN_DIRECTORY) //__FILE__));
 	);
 }
 
@@ -263,7 +263,7 @@ function wp2moodle_generate_hyperlink($cohort,$group,$course,$activity = 0) {
 
 	// needs authentication; ensure userinfo globals are populated
 	global $current_user;
-    get_currentuserinfo();
+    wp_get_current_user();
 
 	$update = get_option('wp2m_update_details') ?: "true";
 

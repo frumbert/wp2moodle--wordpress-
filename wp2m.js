@@ -4,7 +4,7 @@
         init : function(ed, url) {
             ed.addButton('wp2m', {
                 title : 'Wordpress 2 Moodle',
-                image : url+'/icon.png',
+                image : url+'/icon.svg',
                 onclick : function() {
                      ed.selection.setContent('[wp2moodle cohort="" group="" course="" class="wp2moodle" target="_self" authtext="" activity="0"]' + ed.selection.getContent() + '[/wp2moodle]');
                 }
