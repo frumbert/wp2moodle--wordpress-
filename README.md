@@ -1,9 +1,9 @@
-wp2moodle--wordpress-
-=====================
+wp2moodle
+=========
 
-Wordpress to Moodle pass through authentication plugin (wordpress end). Takes the user that is logged onto wordpress and passes their details over to Moodle (encrypted using openssl), authenticates them, enrols them in one or more courses, then opens the course.
+Wordpress-to-Moodle pass through authentication plugin (wordpress end). It takes the user that is logged onto wordpress and passes their details over to Moodle (encrypted using openssl), authenticates them, enrols them in one or more courses, then opens the course.
 
-> Note: The link that is gnerated is internally timestamped and will expire. *How long* before it expires is configured in the  [Moodle-end plugin](https://github.com/frumbert/wp2moodle-moodle).
+> Note: The link that is gnerated is internally timestamped and will expire to reduce bookmarking or sharing. *How long* before it expires is configured in the  [Moodle-end plugin](https://github.com/frumbert/wp2moodle-moodle).
 
 Demo / Further documenation
 ---------------------------
