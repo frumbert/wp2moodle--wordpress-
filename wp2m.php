@@ -306,7 +306,11 @@ function wp2m_register_button($buttons) {
 }
 function wp2m_add_plugin($plugin_array) {
 	// __FILE__ breaks if wp2moodle is a symlink, so we have to use the defined directory
+<<<<<<< Updated upstream
    $plugin_array['wp2m'] = plugins_url( 'wp2moodle/wp2m.js', WP2M_PLUGIN_DIRECTORY); // __FILE__ );
+=======
+   $plugin_array['wp2m'] = plugin_dir_url(__FILE__).'wp2m.js'; // __FILE__ );
+>>>>>>> Stashed changes
    return $plugin_array;
 }
 
