@@ -81,5 +81,5 @@
     </p>
 
 </form>
-    <p><a href="https://icons8.com/web-app/38662/Moodle" style="float: right;" target="_blank"><img src="<?php echo plugins_url('wp2moodle/icon.svg', WP2M_PLUGIN_DIRECTORY); ?>" style="vertical-align: bottom;">Moodle icon credits</a>
+    <p><a href="https://icons8.com/web-app/38662/Moodle" style="float: right;" target="_blank"><img src="<?php echo plugin_dir_url(__FILE__).'icon.svg'; ?>" style="vertical-align: bottom;">Moodle icon credits</a>
 </div>
