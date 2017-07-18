@@ -186,10 +186,10 @@ function wp2moodle_handler( $atts, $content = null ) {
 	if ($content == null || !is_user_logged_in() ) {
 		if (trim($authtext) == "") {
 			//$url = do_shortcode($content); // return unlinked content (value between start and end tag)
-			$url = '<a href="' . echo wp_registration_url(); . '" class="'.esc_attr($class).'">' . do_shortcode($content) . '</a>';
+			$url = '<a href="' . wp_registration_url(); . '" class="'.esc_attr($class).'">' . do_shortcode($content) . '</a>';
 		} else {
 			//$url = do_shortcode($authtext); // return authtext (value of attribute, if set)
-			$url = '<a href="' . echo wp_registration_url(); . '" class="'.esc_attr($class).'">' . do_shortcode($authtext) . '</a>';
+			$url = '<a href="' . wp_registration_url(); . '" class="'.esc_attr($class).'">' . do_shortcode($authtext) . '</a>';
 		}
 	} else {
 		// url = moodle_url + "?data=" + <encrypted-value>
