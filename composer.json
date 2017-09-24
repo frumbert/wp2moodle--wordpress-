@@ -1,0 +1,19 @@
+{
+  "name": "frumbert/wp2moodle--wordpress-",
+  "description": "",
+  "type": "wordpress-plugin",
+  "keywords": [
+    "moodle",
+    "wordpress"
+  ],
+  "homepage": "https://github.com/frumbert/wp2moodle--wordpress-",
+  "license": "GPL2",
+  "support": {
+    "issues": "https://github.com/frumbert/wp2moodle--wordpress-/issues",
+    "wiki": "https://github.com/frumbert/wp2moodle--wordpress-/wiki"
+  },
+  "require": {
+    "composer/installers": "~1.0",
+    "php": ">=5.6"
+  }
+}
