@@ -56,7 +56,8 @@ Shortcode examples
     `group`: (optional) the id [mdl_groups.idnumber] of the moodle group in which to enrol the user (can be a comma-seperated list for multiple enrolments)
     `course`: (optional) the id [mdl_courses.idnumber] of the moodle course in which to enrol the user (can be a comma-seperated list for multiple enrolments)
     `authtext`: (optional) the text that appears instead when the user is not yet logged on
-    `activity`: (optional, number) the numerical index of an activity to open after enrolment. E.g. "2" will attempt to open the second activity in the destination course.
+    `activity`: (optional, number) the numerical index of an activity to open after enrolment. E.g. "2" will attempt to open the second activity in the destination course
+    `enrolas`: (optional, string) the shortname of the role in moodle to enrol this user as (e.g. student, teacher)
 
 Requirements:
 -------------
